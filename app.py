@@ -79,7 +79,6 @@ def save_data(data):
     try:
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
 
-        # Получаем значения username и message из payload
         payload = {key: value for key, value in [el.split('=') for el in body.split('&')]}
         username = payload.get('username', 'default_username')
         message = payload.get('message', 'default_message')
@@ -90,17 +89,17 @@ def save_data(data):
         }
 
         file_path = BASE_DIR.joinpath('storage/data.json')
-        # Чтение существующих данных из файла, если они есть
+
         try:
             with open(file_path, 'r', encoding='utf-8') as existing_file:
                 existing_data = json.load(existing_file)
         except (FileNotFoundError, json.JSONDecodeError):
             existing_data = {}
 
-        # Добавление новой записи
+
         existing_data[timestamp] = entry
 
-        # Запись обновленных данных в файл
+
         with open(file_path, 'w', encoding='utf-8') as fd:
             json.dump(existing_data, fd, ensure_ascii=False, indent=2)
     except ValueError as err:
